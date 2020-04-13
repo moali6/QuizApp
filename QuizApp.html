@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+
+    <style>
+
+        @keyframes animate_question {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: rotate(1turn);
+            }
+
+            100% {
+                opacity: 1;
+                transform: rotate(1turn);
+            }
+        }
+
+        @keyframes question_slideout {
+            from {
+                margin-left: 0%;
+                width: 300%; 
+            }
+
+            to {
+                margin-left: 100%;
+                width: 100%;
+            }
+        }
+
+        .questiondisplayanimate {
+            animation-duration:1s;
+            animation-delay: 200ms;
+            animation-name: animate_question;
+        }
+
+        .questiondisplayslideout {
+            animation-duration:1s;
+            animation-delay: 200ms;
+            animation-name: question_slideout;
+        }
+        
+        body {
+            margin:0;
+            padding:0;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        #usernamedisplay {
+            text-align: right;
+            display: none;
+        }
+
+        #questionexchangeanimated {
+            display: none;
+            text-align: left;
+        }
+
+        #nameform {
+            display: block;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #clearbutton {
+            display: none;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+
+        window.onload = function() {
+            
+            function nameSubmit(event) {                
+                localStorage.setItem('userName', nameForm.elements.namedItem("name").value);
+                event.preventDefault();
+                nameForm.remove();
+                buttonClear.style.display = "block";
+                usernamedisplay.style.display = "block";
+                usernamedisplay.textContent = "User: " + nameForm.elements.namedItem("name").value;
+            }
+
+            function clearName(event) {  
+                localStorage.removeItem('userName');
+                event.preventDefault();
+                buttonClear.style.display = "none";
+                usernamedisplay.style.display = "none";
+            }
+
+            function exchangeQuestion(event) {
+                event.preventDefault();
+                questionexchangeanimated.style.display = "block";
+                questionexchangeanimated.textContent = exchangeQuestionForm.elements.namedItem("question").value;
+                questionexchangeanimated.classList.toggle("questiondisplayanimate");
+                questionexchangeanimated.textContent = "New question";
+            }
+
+            function animateQuestionFunction(event) {
+                questionDisplay.classList.toggle("questiondisplayanimate");
+            }
+
+            const nameForm = document.getElementById('nameform');
+            const exchangeQuestionForm = document.getElementById('exchangequestionform');
+            const usernamedisplay = document.getElementById('usernamedisplay');
+            const questionDisplay = document.getElementById('questiondisplay');
+            const buttonClear = document.getElementById('clearbutton');
+            const buttonAnimateQuestion = document.getElementById('animatequestion');
+
+            nameForm.addEventListener('submit', nameSubmit);
+            exchangeQuestionForm.addEventListener('submit', exchangeQuestion);
+            buttonClear.addEventListener('click', clearName);
+            buttonAnimateQuestion.addEventListener('click', animateQuestionFunction);
+        }
+
+    </script>
+
+</head>
+<body>
+
+    <h1>Welcome to the Quiz App</h1>
+
+    <br>
+
+    <table id="participants_table">
+        <tr>
+          <th>Participants</th>
+        </tr>
+        <tr>
+          <td>Lion</td>
+        </tr>
+      </table>
+
+    <br>
+
+    <p id="usernamedisplay"></p>
+
+    <br>
+
+    <p id="questiondisplay">What is the natural satellite of the earth?</p>
+
+    <br>
+
+    <table width="100%" id="score_table">
+        <tr>
+          <th>Your Score</th>
+          <th>Opponent's Score</th>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>0</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <form id="nameform">
+        <label>Name: <input type="text" id="name" name="name"></label>
+        <br><br>
+        <button type="submit">Submit</button>
+      </form>
+
+    <button type="button" id="clearbutton">Clear Name</button>
+
+    <br>
+
+    <form id="exchangequestionform">
+        <label>Question: <input type="text" id="question" name="question"></label>
+        <br><br>
+        <button type="submit">Exchange</button>
+    </form>
+
+    <br>
+
+    <p id="questionexchangeanimated"></p>
+
+    <button type="button" id="animatequestion">Animate Question</button> 
+
+
+
+</body>
+</html>
