@@ -84,10 +84,52 @@
 
     </style>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.2.0/peerjs.min.js"></script>
+
     <script type="text/javascript">
 
+        if ('serviceWorker' in navigator) {
+            console.log("Inside!");
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('SW Registered!');
+                }, function(err) {
+                    console.log('Error!');
+                });
+            });
+        }
+
         window.onload = function() {
-            
+        
+            // Using default
+            var peer = new Peer({key: 'lwjd5qra8257b9'});
+
+            peer.on('open', function(id) {
+                console.log('ID: ' + id);
+            });
+
+            // Start connection
+            var destId = "";
+            var conn = peer.connect(destId);
+
+            // Recieve connection event
+            peer.on('connection', function(conn) {
+                console.log('Recieve connection event');
+            });
+
+            conn.on('open', function() {
+                // Receive messages
+                conn.on('data', function(data) {
+                    console.log(data);
+                });
+
+                // Send
+                conn.send({
+                    question: 'Question 01?',
+                });
+                console.log('Message sent!');
+            });
+
             function nameSubmit(event) {                
                 localStorage.setItem('userName', nameForm.elements.namedItem("name").value);
                 event.preventDefault();
